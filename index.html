@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Astranova Game</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body { background: #1a1a1a; color: white; text-align: center; font-family: sans-serif; }
+        .game-box { margin-top: 50px; border: 2px solid #ff0055; padding: 20px; border-radius: 15px; }
+        button { padding: 10px 20px; background: #ff0055; color: white; border: none; border-radius: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>یاریا Astranova 🚀</h1>
+    <div class="game-box">
+        <p>Multiplier: <span id="mult">1.00</span>x</p>
+        <button onclick="startCrash()">Start Bet</button>
+    </div>
+
+    <script>
+        let tg = window.Telegram.WebApp;
+        tg.expand(); // دا یاری ل سه‌ر هه‌می شاشێ بیت
+
+        function startCrash() {
+            let val = 1.00;
+            setInterval(() => {
+                val += 0.01;
+                document.getElementById('mult').innerText = val.toFixed(2);
+            }, 100);
+        }
+    </script>
+</body>
+</html>
