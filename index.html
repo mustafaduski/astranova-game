@@ -1,30 +1,60 @@
 <!DOCTYPE html>
-<html>
+<html lang="ku">
 <head>
-    <title>Astranova Game</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Astranova Crash</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        body { background: #1a1a1a; color: white; text-align: center; font-family: sans-serif; }
-        .game-box { margin-top: 50px; border: 2px solid #ff0055; padding: 20px; border-radius: 15px; }
-        button { padding: 10px 20px; background: #ff0055; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        body { margin: 0; background: #0b0e11; color: white; font-family: 'Arial', sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; overflow: hidden; }
+        .game-container { text-align: center; width: 90%; max-width: 400px; background: #161a1e; padding: 20px; border-radius: 20px; border: 1px solid #2b2f36; }
+        #multiplier { font-size: 4rem; font-weight: bold; color: #f0b90b; margin: 20px 0; }
+        .btn-play { background: #2ebd85; color: white; border: none; padding: 15px 40px; font-size: 1.2rem; border-radius: 10px; cursor: pointer; width: 100%; font-weight: bold; }
+        .btn-play:disabled { background: #3a3f45; color: #848e9c; }
+        .plane-icon { font-size: 50px; transition: transform 0.1s; }
     </style>
 </head>
 <body>
-    <h1>یاریا Astranova 🚀</h1>
-    <div class="game-box">
-        <p>Multiplier: <span id="mult">1.00</span>x</p>
-        <button onclick="startCrash()">Start Bet</button>
+    <div class="game-container">
+        <h2>ASTRANOVA CRASH</h2>
+        <div id="plane" class="plane-icon">✈️</div>
+        <div id="multiplier">1.00x</div>
+        <button id="playBtn" class="btn-play" onclick="startGame()">BET / START</button>
     </div>
 
     <script>
         let tg = window.Telegram.WebApp;
-        tg.expand(); // دا یاری ل سه‌ر هه‌می شاشێ بیت
+        tg.expand();
 
-        function startCrash() {
-            let val = 1.00;
-            setInterval(() => {
-                val += 0.01;
-                document.getElementById('mult').innerText = val.toFixed(2);
+        let multiplierElement = document.getElementById('multiplier');
+        let playBtn = document.getElementById('playBtn');
+        let plane = document.getElementById('plane');
+        let running = false;
+
+        function startGame() {
+            if (running) return;
+            running = true;
+            playBtn.disabled = true;
+            let count = 1.00;
+            let crashPoint = (Math.random() * 5 + 1).toFixed(2); // ژمارەیەکا هەرەمەکی بۆ کراشێ
+
+            let interval = setInterval(() => {
+                count += 0.01;
+                multiplierElement.innerText = count.toFixed(2) + "x";
+                plane.style.transform = `translateY(-${(count-1)*20}px) translateX(${(count-1)*10}px)`;
+
+                if (count >= crashPoint) {
+                    clearInterval(interval);
+                    multiplierElement.style.color = "#f6465d";
+                    multiplierElement.innerText = "FLEW AWAY! 💥";
+                    setTimeout(() => {
+                        running = false;
+                        playBtn.disabled = false;
+                        multiplierElement.style.color = "#f0b90b";
+                        multiplierElement.innerText = "1.00x";
+                        plane.style.transform = "translate(0,0)";
+                    }, 3000);
+                }
             }, 100);
         }
     </script>
